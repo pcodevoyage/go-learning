@@ -2,9 +2,11 @@ package main
 
 import (
   "fmt"
-  // "io"
-  "io/ioutil"
+  "io"
+  // "io/ioutil"
   "os"
+  "log"
+  "bufio"
 )
 
 
@@ -16,19 +18,31 @@ func check(e error){
 func main(){
 
   args := os.Args[1:]
-  fmt.Println(args[0])
-
+  
   file :=args[0]
 
-  dat, err := ioutil.ReadFile(file)
-  check(err)
-  fmt.Print(string(dat))
 
-  f,err := os.Open(file)
-  check(err)
+  f, err := os.Open(file)
+  if err != nil {
+    log.Fatal(err)
+  }
 
-  b1 := make([]byte, 5)
-  n1, err := f.Read(b1)
-  check(err)
-  fmt.Printf("%d bytes: %s\n", n1, string(b1))
+  bf := bufio.NewReader(f)
+  for{
+    line, isPrefix,err :=bf.ReadLine()
+
+    if err == io.EOF{
+      break
+    }
+
+    if err !=nil {
+      log.Fatal(err)
+    }
+
+    if isPrefix{
+      log.Fatal("Error : Unexpected line ")
+    }
+
+    fmt.Println(string(line))
+  }
 }
