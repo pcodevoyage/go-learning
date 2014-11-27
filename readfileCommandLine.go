@@ -18,7 +18,7 @@ func check(e error){
 func main(){
 
   args := os.Args[1:]
-  
+
   file :=args[0]
 
 
@@ -26,6 +26,8 @@ func main(){
   if err != nil {
     log.Fatal(err)
   }
+
+  defer f.Close()
 
   bf := bufio.NewReader(f)
   for{
