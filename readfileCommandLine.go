@@ -7,6 +7,7 @@ import (
   "os"
   "log"
   "bufio"
+  "strings"
 )
 
 
@@ -30,6 +31,8 @@ func main(){
   defer f.Close()
 
   bf := bufio.NewReader(f)
+  var entries map[string]string
+  entries = make(map[string]string)
   for{
     line, isPrefix,err :=bf.ReadLine()
 
@@ -45,6 +48,14 @@ func main(){
       log.Fatal("Error : Unexpected line ")
     }
 
-    fmt.Println(string(line))
+    s := strings.Split(string(line),"|")
+    fmt.Println(s[0])
+    entries[string(s[0])]= s[1]
+
+    // fmt.Println(string(line))
+  }
+
+  for key, value := range entries{
+    fmt.Println("Key :"+key + " - Value:"+value)
   }
 }
