@@ -8,7 +8,7 @@ import(
   "io"
 )
 
-func getFilenameFromConfig()(dbFile string){
+func getFilenameFromConfig(){
 
   f,err := os.Open("config")
   if err!=nil{
@@ -24,18 +24,18 @@ func getFilenameFromConfig()(dbFile string){
     panic(err)
   }
 
+  //dbFile is a global variable.
   dbFile =string(line)
 
   //TODO : validate that dbFile is a valid file path.
-  return
 }
 
-func addTask(file string, task string){
-  fmt.Println("ADD TASKS: file is "+file+". Task :"+task)
+func addTask(task string){
+  fmt.Println("ADD TASKS: file is "+dbFile+". Task :"+task)
 }
 
-func showTask(file string){
-  f, err := os.Open(file)
+func showTask(){
+  f, err := os.Open(dbFile)
   if err != nil {
     panic(err)
   }
@@ -58,17 +58,18 @@ func showTask(file string){
   }
 }
 
-func reOrderTask(file string, oldNumber string, newNumber string){
-  fmt.Println("REORDER TASKS : file : "+file+". Old :"+ oldNumber + ".New :"+newNumber)
+func reOrderTask(oldNumber string, newNumber string){
+  fmt.Println("REORDER TASKS : file : "+dbFile+". Old :"+ oldNumber + ".New :"+newNumber)
 }
 
-func removeTask(file string,taskNum string){
-  fmt.Println("REMOVE TASKS : file : "+file+" taskNum:"+taskNum)
+func removeTask(taskNum string){
+  fmt.Println("REMOVE TASKS : file : "+dbFile+" taskNum:"+taskNum)
 }
 
+var dbFile = ""
 func main(){
 
-  dbFile := getFilenameFromConfig()
+  getFilenameFromConfig()
   // fmt.Println(dbFile)
 
   args := os.Args[1:]
@@ -79,10 +80,10 @@ func main(){
   }
 
   switch args[0]{
-    case "-a": addTask(dbFile,strings.Join(args[1:]," "))
-    case "-s": showTask(dbFile)
-    case "-r": removeTask(dbFile,args[1])
-    case "-c": reOrderTask(dbFile,args[1],args[2])
+    case "-a": addTask(strings.Join(args[1:]," "))
+    case "-s": showTask()
+    case "-r": removeTask(args[1])
+    case "-c": reOrderTask(args[1],args[2])
   }
 
 }
