@@ -28,7 +28,7 @@ func main(){
   defer f.Close()
 
   w := bufio.NewWriter(f)
-  i,err :=w.WriteString("1\tnewtask written")
+  i,err :=w.WriteString("1newtask written\n")
   if err != nil {
     log.Fatal(err)
   }

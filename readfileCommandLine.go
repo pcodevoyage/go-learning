@@ -50,10 +50,19 @@ func main(){
 
     s := strings.Split(string(line),"|")
     fmt.Println(s[0])
-    entries[string(s[0])]= s[1]
+    entries[s[0]]= s[1]
 
     // fmt.Println(string(line))
   }
+
+  for key, value := range entries{
+    fmt.Println("Key :"+key + " - Value:"+value)
+  }
+
+
+  tmp := entries["1"]
+  entries["1"] = entries["2"]
+  entries["2"] = tmp
 
   for key, value := range entries{
     fmt.Println("Key :"+key + " - Value:"+value)
