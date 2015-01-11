@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sort"
 )
 
 func getFilenameFromConfig() {
@@ -36,14 +37,14 @@ func addTask(task string) {
 }
 
 func showTask() {
-	tasks := getAllTasks()
-	for key, value:= range tasks {
+	tasks, sortedKey:= getAllTasks()
+	for _,key:= range sortedKey {
 		fmt.Print(key)
-		fmt.Println("> " + value)
+		fmt.Println("> " + tasks[key])
 	}
 }
 
-func getAllTasks() (tasks map[int64]string) {
+func getAllTasks() (tasks map[int]string, sortedKey []int) {
 	f, err := os.Open(dbFile)
 	if err != nil {
 		panic(err)
@@ -51,7 +52,7 @@ func getAllTasks() (tasks map[int64]string) {
 
 	defer f.Close()
 
-	tasks = make(map[int64]string)
+	tasks = make(map[int]string)
 
 	bf := bufio.NewReader(f)
 	for {
@@ -66,9 +67,12 @@ func getAllTasks() (tasks map[int64]string) {
 		}
 
 		s := strings.Split(string(line), "|")
-		id, _ := strconv.ParseInt(s[0], 0, 64)
+		i, _ := strconv.ParseInt(s[0], 0, 64)
+		id := int(i)
+		sortedKey = append(sortedKey,id)
 		tasks[id] = s[1]
 	}
+	sort.Ints(sortedKey)
 	return
 }
 
