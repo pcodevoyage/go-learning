@@ -34,13 +34,31 @@ func getFilenameFromConfig() {
 
 func addTask(task string) {
 	fmt.Println("ADD TASKS: file is " + dbFile + ". Task :" + task)
+
+	_, sortedKey:= getAllTasks()
+	highestTaskKey := sortedKey[len(sortedKey)-1] + 1
+	writeString :=strconv.Itoa(highestTaskKey) + "|" +task
+
+	f, err := os.OpenFile(dbFile, os.O_APPEND|os.O_WRONLY, 0600)
+	if err != nil {
+		panic(err)
+	}
+
+	defer f.Close()
+
+	w := bufio.NewWriter(f)
+	_,err1 :=w.WriteString(writeString)
+	if err1 != nil {
+		panic(err1)
+	}
+	w.Flush()
+
 }
 
 func showTask() {
 	tasks, sortedKey:= getAllTasks()
 	for _,key:= range sortedKey {
-		fmt.Print(key)
-		fmt.Println("> " + tasks[key])
+		fmt.Println(strconv.Itoa(key)+"> " + tasks[key])
 	}
 }
 
