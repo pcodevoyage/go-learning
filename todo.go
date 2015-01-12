@@ -57,6 +57,10 @@ func addTask(task string) {
 
 func showTask() {
 	tasks, sortedKey:= getAllTasks()
+	printTasks(tasks,sortedKey)
+}
+
+func printTasks(tasks map[int]string, sortedKey []int){
 	for _,key:= range sortedKey {
 		fmt.Println(strconv.Itoa(key)+"> " + tasks[key])
 	}
@@ -85,8 +89,7 @@ func getAllTasks() (tasks map[int]string, sortedKey []int) {
 		}
 
 		s := strings.Split(string(line), "|")
-		i, _ := strconv.ParseInt(s[0], 0, 64)
-		id := int(i)
+		id := toInt(s[0])
 		sortedKey = append(sortedKey,id)
 		tasks[id] = s[1]
 	}
@@ -94,8 +97,21 @@ func getAllTasks() (tasks map[int]string, sortedKey []int) {
 	return
 }
 
-func reOrderTask(oldNumber string, newNumber string) {
-	fmt.Println("REORDER TASKS : file : " + dbFile + ". Old :" + oldNumber + ".New :" + newNumber)
+func toInt(s string)(i int){
+	i1,_ := strconv.ParseInt(s, 0, 64)
+	i = int(i1)
+	return
+}
+
+func reOrderTask(oldNumber int, newNumber int) {
+	fmt.Println("REORDER TASKS : file : " + dbFile + ". Old :" + strconv.Itoa(oldNumber) + ".New :" + strconv.Itoa(newNumber))
+	_, sortedKey:= getAllTasks()
+	if (oldNumber >= len(sortedKey) || newNumber >= len(sortedKey)){
+		fmt.Println("Wrong order number. Max order number is "+strconv.Itoa(len(sortedKey)))
+	}
+
+
+
 }
 
 func removeTask(taskNum string) {
@@ -124,7 +140,7 @@ func main() {
 	case "-r":
 		removeTask(args[1])
 	case "-c":
-		reOrderTask(args[1], args[2])
+		reOrderTask(toInt(args[1]), toInt(args[2]))
 	}
 
 }
