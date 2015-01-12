@@ -97,20 +97,12 @@ func getAllTasks() (tasks map[int]string, sortedKey []int) {
 	return
 }
 
-func toInt(s string)(i int){
-	i1,_ := strconv.ParseInt(s, 0, 64)
-	i = int(i1)
-	return
-}
-
 func reOrderTask(oldNumber int, newNumber int) {
 	fmt.Println("REORDER TASKS : file : " + dbFile + ". Old :" + strconv.Itoa(oldNumber) + ".New :" + strconv.Itoa(newNumber))
 	_, sortedKey:= getAllTasks()
 	if (oldNumber >= len(sortedKey) || newNumber >= len(sortedKey)){
 		fmt.Println("Wrong order number. Max order number is "+strconv.Itoa(len(sortedKey)))
 	}
-
-
 
 }
 
